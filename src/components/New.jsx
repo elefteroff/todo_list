@@ -1,42 +1,30 @@
 import React, { useState } from 'react';
 
 const New = (props) => {
+    const { createTask } = props
 
-    const [newColor, setNewColor] = useState("")
-
-    const submitColor = (e) => {
-        e.preventDefault();
-        props.createBox({color: newColor, status: false});
-
-        const myNewBox = {
-            color: newColor,
-            status: false
-        }
-    }
+    const [newTaskText, setNewTaskText] = useState("")
 
     const submitTask = (e) => {
         e.preventDefault();
-        // setNewTask({newTask: newTask});
-        props.newTaskItem(props.setNewTask);
+
+        // Create the task object
+        const newTaskObj = {
+            text: newTaskText, taskStatus: false
+        }
+        createTask(newTaskObj);
     }
 
     return (
-        <fieldset>
-            <legend>New.jsx</legend>
-            {/* newTask: {newTask} */}
-            props.newTask: {props.newTask}
+        <p>
+            Create New Task
             <form onSubmit={submitTask}>
-                <input type="text" onChange={(e) => props.setNewTask(e.target.value)} value={props.newTask}/>
+                <input type="text" onChange={(e) => setNewTaskText(e.target.value)} value={newTaskText}/>
                 <button>Add</button>
             </form>
-
-            newColor: {newColor}
-
-            <form onSubmit={submitColor}>
-                <input type="color" onChange={(e) => setNewColor(e.target.value)} value={newColor}/>
-                <button>Add</button>
-            </form>
-        </fieldset>
+            {JSON.stringify(newTaskText)}
+        </p>
+        
     )
 }
 
