@@ -1,34 +1,27 @@
 import './App.css';
 import { useState } from 'react';
-import Box from './components/Box';
+import Task from './components/Task';
 import New from './components/New';
 
 function App() {
   
-  const [boxes, setBoxes] = useState(
+  const [tasks, setTasks] = useState(
     [
-      {color: "red", taskStatus: false, checkedStatus: false},
-      {color: "green", taskStatus: true, checkedStatus: false}, 
-      {color: "blue", taskStatus: false, checkedStatus: false},
+      {text: "Get Milk", taskStatus: true},
+      {text: "Get Eggs", taskStatus: false}, 
+      {text: "Get Bacon", taskStatus: false},
     ]
     )
-  // const [tasks, setTasks] = useState(
-  //   [
-  //     {status: true},
-  //   ]
-  // )
-  
-  const createBox = (newBoxObj) => {
-    setBoxes([...boxes, newBoxObj])
+
+    // Creating a new task
+  const createTask = (newTaskObj) => {
+    // Spreading the existing tasks and adding one to the end (as a task obj)
+    setTasks([...tasks, newTaskObj])
   }
 
-  // const createTask = (newTaskObj) => {
-  //   setTasks([tasks, newTaskObj])
-  // }
-
-  const deleteBox = (deletedIdx) => {
+  const deleteTask = (deletedIdx) => {
 // filter says that if "true" return it otherwise do not return it.
-    const filteredBoxes = boxes.filter( (box, i) => {
+    const filteredTasks = tasks.filter( (task, i) => {
       if(i === deletedIdx) {
         return false;
       } else  {
@@ -36,65 +29,44 @@ function App() {
       }
     });
 
-    setBoxes(filteredBoxes);
+    setTasks(filteredTasks);
   }
 
-  // const newTask = (newTaskObj) => {
-  //   setBoxes([...boxes, newTaskObj])
-  // }
-  const [newTask, setNewTask] = useState("")
-  const [tasks, setTasks] = useState([])
-  const newTaskItem = (tasks) => {
-    setTasks(tasks);
-  }
+  const updateTask = (idx) => {
 
-  const updateBox = (idx) => {
-
-    const checkBoxes = [...boxes];
+    // Setting a new variable to a copy of the tasks array.  "..." spreads all of the elements of an array.  Essentially the following line creates a copy of the tasks array.
+    const copyTasks = [...tasks];
 // There is a long way and a short way of doing the following:
       // 1.
-      // if(copyBoxes[idx].status === true){
+      // if(copyTasks[idx].status === true){
       //   copyBoxes[idx].status = false;
       // } else {
       //   copyBoxes[idx].status = true;
       // }
       // 2.
-      checkBoxes[idx].checkedStatus = !checkBoxes[idx].checkedStatus
-      // copyBoxes[idx].taskStatus = !copyBoxes[idx].taskStatus
-      // if(checkBoxes[idx].taskStatus === true){
-      //   //   return ;
-      //   }
+      copyTasks[idx].taskStatus = !copyTasks[idx].taskStatus
 
-      setBoxes(checkBoxes)
+      setTasks(copyTasks)
   }
 
 return (
   <div className="App">
-    <h1>Boxes</h1>
-    {JSON.stringify(boxes)}
+    <h1>Tasks</h1>
+    {JSON.stringify(tasks)}
     <hr />
-    <New createBox={createBox} newTaskItem={newTaskItem}/>
+    <New createTask={createTask}/>
     {
-      boxes.map( (box, idx, deletedIdx, updateBox) => {
-        return <Box 
-          box={box} 
-          idx={idx} 
-          index={deletedIdx} 
-          deleteBox={deleteBox} 
-          updateBox={updateBox} />
+      tasks.map( (task, idx) => {
+        return <Task 
+          task={task} 
+          idx={idx}  
+          deleteTask={deleteTask} 
+          updateTask={updateTask}
+          key ={idx} />
       })
     }
-
-    {
-      tasks.map( (task, index) => {
-        return <Box
-          task={task}
-          index={index} />
-        })
-      } 
   </div> 
 );
 }
-
 
 export default App;
